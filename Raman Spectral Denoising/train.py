@@ -193,7 +193,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     print('Started Training')
     print('Training Details:')
-    print('Network:         {}'.format(args.network))
+    #print('Network:         {}'.format(args.network))
     print('Epochs:          {}'.format(args.epochs))
     print('Batch Size:      {}'.format(args.batch_size))
     print('Optimizer:       {}'.format(args.optimizer))
@@ -203,8 +203,8 @@ def main_worker(gpu, ngpus_per_node, args):
 
     DATE = datetime.datetime.now().strftime("%Y_%m_%d")
 
-    log_dir = "runs/{}_{}_{}_{}".format(DATE, args.optimizer, args.scheduler, args.network)
-    models_dir = "{}_{}_{}_{}.pt".format(DATE, args.optimizer, args.scheduler, args.network)
+    log_dir = "runs/{}_{}_{}".format(DATE, args.optimizer, args.scheduler) #, args.network)
+    models_dir = "{}_{}_{}.pt".format(DATE, args.optimizer, args.scheduler) #, args.network)
 
     writer = SummaryWriter(log_dir = log_dir)
 
