@@ -4,6 +4,21 @@ import random
 import datetime
 import time
 
+
+import pickle
+# functions
+def save_obj(obj, name, path='./'):
+    if os.path.exists(path) == False:
+        os.makedirs(path)
+    with open(path + name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def load_obj(name, path='./'):
+    #    print('load obj:',os.getcwd())
+    with open(path + name + '.pkl', 'rb') as f:
+        return pickle.load(f)
+
 class ProgressMeter(object):
     def __init__(self, num_batches, meters, prefix=""):
         self.batch_fmtstr = self._get_batch_fmtstr(num_batches)

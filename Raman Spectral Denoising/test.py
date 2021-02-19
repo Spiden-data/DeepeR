@@ -33,6 +33,9 @@ import model, dataset, utilities
 
 parser = argparse.ArgumentParser(description='DeNoiser Training')
 
+parser.add_argument('-path', '--path_to_data', default='./', type=str,
+                    help='directory containing inputs.pkl and outputs.pkl (default: ./)')
+
 parser.add_argument('-j', '--workers', default=0, type=int, metavar='N',
                     help='number of data loading workers (default: 0)')
 parser.add_argument('-b', '--batch-size', default=256, type=int,
@@ -123,11 +126,15 @@ def main_worker(gpu, ngpus_per_node, args):
     # ----------------------------------------------------------------------------------------
     # Define dataset path and data splits
     # ----------------------------------------------------------------------------------------    
-    Input_Data = scipy.io.loadmat("\Path\To\Inputs.mat")
-    Output_Data = scipy.io.loadmat("\Path\To\Outputs.mat")
+    #Input_Data = scipy.io.loadmat("\Path\To\Inputs.mat")
+    #Output_Data = scipy.io.loadmat("\Path\To\Outputs.mat")
 
-    Input = Input_Data['data']
-    Output = Output_Data['data']
+    #Input = Input_Data['data']
+    #Output = Output_Data['data']
+
+    Input = utilities.load_obj(f'{args.path_to_data}/inputs') #Input_Data['Inputs']
+    Output = utilities.load_obj(f'{args.path_to_data}/outputs')  # Output_Data['Outputs']
+
 
     # ----------------------------------------------------------------------------------------
     # Create datasets (with augmentation) and dataloaders

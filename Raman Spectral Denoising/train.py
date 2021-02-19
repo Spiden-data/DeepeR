@@ -33,6 +33,9 @@ import model, dataset, utilities
 
 parser = argparse.ArgumentParser(description='DeNoiser Training')
 
+parser.add_argument('-path', '--path_to_data', default='./', type=str,
+                    help='directory containing inputs.pkl and outputs.pkl (default: ./)')
+
 parser.add_argument('-j', '--workers', default=0, type=int, metavar='N',
                     help='number of data loading workers (default: 0)')
 parser.add_argument('--epochs', default=500, type=int, metavar='N',
@@ -136,11 +139,11 @@ def main_worker(gpu, ngpus_per_node, args):
     # ----------------------------------------------------------------------------------------
     # Define dataset path and data splits
     # ----------------------------------------------------------------------------------------    
-    Input_Data = scipy.io.loadmat("\Path\To\Inputs.mat")
-    Output_Data = scipy.io.loadmat("\Path\To\Outputs.mat")
+    #Input_Data =  #scipy.io.loadmat("\Path\To\Inputs.mat")
+    #Output_Data = #scipy.io.loadmat("\Path\To\Outputs.mat")
 
-    Input = Input_Data['Inputs']
-    Output = Output_Data['Outputs']
+    Input = utilities.load_obj(f'{args.path_to_data}/inputs') #Input_Data['Inputs']
+    Output = utilities.load_obj(f'{args.path_to_data}/outputs')  # Output_Data['Outputs']
 
     spectra_num = len(Input)
 
