@@ -12,7 +12,7 @@ class BasicConv(nn.Module):
         basic_conv.append(nn.PReLU())
         if batch_norm:
             basic_conv.append(nn.BatchNorm1d(channels_out))
-        
+
         self.body = nn.Sequential(*basic_conv)
 
     def forward(self, x):
@@ -27,7 +27,7 @@ class ResUNetConv(nn.Module):
             unet_conv.append(nn.PReLU())
             if batch_norm:
                 unet_conv.append(nn.BatchNorm1d(channels))
-        
+
         self.body = nn.Sequential(*unet_conv)
 
     def forward(self, x):
@@ -42,7 +42,7 @@ class UNetLinear(nn.Module):
         for i in range(repeats):
             modules.append(nn.Linear(channels_in, channels_out))
             modules.append(nn.PReLU())
-        
+
         self.body = nn.Sequential(*modules)
 
     def forward(self, x):
@@ -65,33 +65,33 @@ class ResUNet(nn.Module):
         res_conv3 = [BasicConv(128, 256, batch_norm)]
         res_conv3.append(ResUNetConv(num_convs, 256, batch_norm))
         res_conv3.append(BasicConv(256, 128, batch_norm))
-        self.conv3 = nn.Sequential(*res_conv3)       
+        self.conv3 = nn.Sequential(*res_conv3)
         self.up3 = nn.Upsample(scale_factor = 2)
 
         res_conv4 = [BasicConv(256, 128, batch_norm)]
         res_conv4.append(ResUNetConv(num_convs, 128, batch_norm))
         res_conv4.append(BasicConv(128, 64, batch_norm))
-        self.conv4 = nn.Sequential(*res_conv4)     
+        self.conv4 = nn.Sequential(*res_conv4)
         self.up4 = nn.Upsample(scale_factor = 2)
 
         res_conv5 = [BasicConv(128, 64, batch_norm)]
         res_conv5.append(ResUNetConv(num_convs,64, batch_norm))
         self.conv5 = nn.Sequential(*res_conv5)
         res_conv6 = [BasicConv(64, 1, batch_norm)]
-        self.conv6 = nn.Sequential(*res_conv6)    
-        
-        self.linear7 = UNetLinear(3, 500, 500)
-               
+        self.conv6 = nn.Sequential(*res_conv6)
+
+        self.linear7 = UNetLinear(3, 1024, 1024)
+
     def forward(self, x):
         x = self.conv1(x)
         x1 = self.pool1(x)
-        
+
         x2 = self.conv2(x1)
         x3 = self.pool1(x2)
-        
+
         x3 = self.conv3(x3)
         x3 = self.up3(x3)
-        
+
         x4 = torch.cat((x2, x3), dim = 1)
         x4 = self.conv4(x4)
         x5 = self.up4(x4)
@@ -99,7 +99,7 @@ class ResUNet(nn.Module):
         x6 = torch.cat((x, x5), dim = 1)
         x6 = self.conv5(x6)
         x7 = self.conv6(x6)
-        
+
         out = self.linear7(x7)
-        
+
         return out

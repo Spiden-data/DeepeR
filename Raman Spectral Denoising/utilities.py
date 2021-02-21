@@ -19,6 +19,10 @@ def load_obj(name, path='./'):
     with open(path + name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
+#def load_obj(path):
+#    with open(path+'.pkl','rb') as f:
+#        return pickle.load(f)
+
 class ProgressMeter(object):
     def __init__(self, num_batches, meters, prefix=""):
         self.batch_fmtstr = self._get_batch_fmtstr(num_batches)
